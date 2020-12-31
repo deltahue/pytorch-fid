@@ -1,8 +1,8 @@
-[![PyPI](https://img.shields.io/pypi/v/pytorch-fid.svg)](https://pypi.org/project/pytorch-fid/)
+# FID score for PyTorch adapted for Nifti Images
 
-# FID score for PyTorch
+This is a fork of the Pytorch-FID Score adapted, so that it can also handle images of the `.nii` fromat. As much of the code was left in the original state as possible.
 
-This is a port of the official implementation of [Fréchet Inception Distance](https://arxiv.org/abs/1706.08500) to PyTorch. 
+The original Pytorch-FID is a port of the official implementation of [Fréchet Inception Distance](https://arxiv.org/abs/1706.08500) to PyTorch. 
 See [https://github.com/bioinf-jku/TTUR](https://github.com/bioinf-jku/TTUR) for the original implementation using Tensorflow.
 
 FID is a measure of similarity between two datasets of images. 
@@ -15,10 +15,12 @@ The weights and the model are exactly the same as in [the official Tensorflow im
 
 ## Installation
 
-Install from [pip](https://pypi.org/project/pytorch-fid/):
+Install from local repository:
+
+Clone this repository from: https://github.com/deltahue/pytorch-fid
 
 ```
-pip install pytorch-fid
+pip install .
 ```
 
 Requirements:
@@ -28,6 +30,7 @@ Requirements:
 - pillow
 - numpy
 - scipy
+- nibabel
 
 ## Usage
 
@@ -56,7 +59,7 @@ The choices are:
 
 ## Citing
 
-If you use this repository in your research, consider citing it using the following Bibtex entry:
+If you use this repository in your research, consider citing the original pytorch-fid it using the following Bibtex entry:
 
 ```
 @misc{Seitzer2020FID,

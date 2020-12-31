@@ -43,6 +43,9 @@ from PIL import Image
 from scipy import linalg
 from torch.nn.functional import adaptive_avg_pool2d
 
+# .nii support
+import nibabel as nib
+
 try:
     from tqdm import tqdm
 except ImportError:
@@ -66,7 +69,7 @@ parser.add_argument('path', type=str, nargs=2,
                           'to .npz statistic files'))
 
 IMAGE_EXTENSIONS = {'bmp', 'jpg', 'jpeg', 'pgm', 'png', 'ppm',
-                    'tif', 'tiff', 'webp'}
+                    'tif', 'tiff', 'webp', 'nii'}
 
 
 class ImagePathDataset(torch.utils.data.Dataset):
@@ -79,7 +82,16 @@ class ImagePathDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         path = self.files[i]
-        img = Image.open(path).convert('RGB')
+        # case for ".nii" images
+        if str(path).endswith('nii'):
+            img = nib.load(path)
+            img = img.get_fdata()
+            # make image a 3 channel image:
+            img =  np.stack([img[:,:,0], img[:,:,0], img[:,:,0]], 2)
+            # convert to PIL image
+            img = Image.fromarray(img, mode='RGB')
+        else:
+            img = Image.open(path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
         return img
@@ -258,6 +270,7 @@ def calculate_fid_given_paths(paths, batch_size, device, dims):
 
 def main():
     args = parser.parse_args()
+    print(args)
 
     if args.device is None:
         device = torch.device('cuda' if (torch.cuda.is_available()) else 'cpu')
