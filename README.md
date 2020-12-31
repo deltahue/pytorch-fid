@@ -19,6 +19,8 @@ Install from local repository:
 
 Clone this repository from: https://github.com/deltahue/pytorch-fid
 
+Navigate to the repository and install the module locally.
+
 ```
 pip install .
 ```
