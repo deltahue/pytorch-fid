@@ -86,8 +86,16 @@ class ImagePathDataset(torch.utils.data.Dataset):
         if str(path).endswith('nii'):
             img = nib.load(path)
             img = img.get_fdata()
+        
             # make image a 3 channel image:
-            img =  np.stack([img[:,:,0], img[:,:,0], img[:,:,0]], 2)
+            # case for pure 2-channel nifti images
+            if len(img.shape) == 2:
+                img =  np.stack([img[:,:], img[:,:], img[:,:]], 2)
+            elif len(img.shape) == 3 and img.shape[2] == 1:
+                img =  np.stack([img[:,:,0], img[:,:,0], img[:,:,0]], 2)
+            else:
+                print('Nifti format not supported!')
+
             # convert to PIL image
             img = Image.fromarray(img, mode='RGB')
         else:
