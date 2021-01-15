@@ -95,7 +95,9 @@ class ImagePathDataset(torch.utils.data.Dataset):
                 img =  np.stack([img[:,:,0], img[:,:,0], img[:,:,0]], 2)
             else:
                 print('Nifti format not supported!')
-
+            # rescale:
+            img = (img+1024)/4095
+            print(np.min(img), np.max(img), img.shape)
             # convert to PIL image
             img = Image.fromarray(img, mode='RGB')
         else:
